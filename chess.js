@@ -1,5 +1,69 @@
 
 var check_timer = null;
+var move_sound = null;
+var attack_sound = null;
+
+function play_sound(sound) {
+    if (!sound) {
+        return;
+    }
+
+    sound.currentTime = 0;
+    sound.play().catch(function () {
+        // Автовоспроизведение может быть ограничено браузером до первого клика пользователя.
+    });
+}
+
+
+function cell_to_notation(cell_id) {
+    var col = parseInt(cell_id[1], 10);
+    var row = parseInt(cell_id[0], 10);
+    var file = 'abcdefgh'[col];
+    var rank = 8 - row;
+    return file + rank;
+}
+
+function append_game_log(action) {
+    if (!action) {
+        return;
+    }
+
+    var piece_name = {
+        p: 'Пешка',
+        l: 'Ладья',
+        k: 'Конь',
+        s: 'Слон',
+        f: 'Ферзь',
+        kr: 'Король'
+    };
+
+    var from = cell_to_notation(action.from);
+    var to = cell_to_notation(action.to);
+    var piece = piece_name[action.piece] || action.piece;
+    var text = '';
+
+    if (action.type === 'move') {
+        text = piece + ': ход ' + from + ' → ' + to;
+    }
+
+    if (action.type === 'attack_hit') {
+        text = piece + ': атака ' + from + ' → ' + to + ' (враг выжил, HP: ' + action.target_hp + ')';
+    }
+
+    if (action.type === 'attack_kill_move') {
+        text = piece + ': добивание ' + from + ' → ' + to + ' (клетка занята атакующей фигурой)';
+    }
+
+    if (!text) {
+        return;
+    }
+
+    if ($('#game_log .game-log-empty').length) {
+        $('#game_log').html('');
+    }
+
+    $('#game_log').prepend('<div class="game-log-item">' + text + '</div>');
+}
 
 $(document).ready(
 
@@ -18,11 +82,8 @@ $(document).ready(
         get_games_list();
         get_my_games();
 
-//        enemy_mp3 = new Audio();
-//        enemy_mp3.src = '_mp3/gun2.mp3';
-//
-//        death_mp3 = new Audio();
-//        death_mp3.src = '_mp3/mix3.mp3';
+        move_sound = new Audio('_mp3/mix3.mp3');
+        attack_sound = new Audio('_mp3/gun2.mp3');
 
 	}
 );
@@ -257,8 +318,12 @@ $(document).ready(
     function oncellclick(div){
 
         //console.log('chess onclick '+board.last_cell.fig);
-        board.cell_click(div.id);
+        var click_result = board.cell_click(div.id);
         $("#board").html(board.gethtml());
+
+        if (click_result === 'done') {
+            append_game_log(board.last_action);
+        }
 
     }
     function start_check_timer(){
