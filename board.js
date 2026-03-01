@@ -17,12 +17,14 @@ var board = {};
 	board.cells = [];
 	board.last_cell = {};
 	board.selected_cell = {};
+    board.last_action = null;
     board.game_id = 0;
     board.player_color = 'white';
 
 	board.init = function(){
 
 		this.last_cell = new cell(-1,-1);
+        this.last_action = null;
 
 		for (var row = 0; row < 8; row++){
 
@@ -113,6 +115,12 @@ var board = {};
             this.clear_moved();
 
             this.player_color = this.player_color == 'white' ? 'black' : 'white';
+            this.last_action = {
+                type: 'move',
+                from: from_cell.id,
+                to: cell.id,
+                piece: cell.fig.tip
+            };
             $('#div_info').html('Ход ' + this.player_color);
             //save_board();
             return 'done';
@@ -120,6 +128,10 @@ var board = {};
 
 
         if (cell.enemy) {
+
+            var attacker_cell = this.selected_cell;
+            var target_cell = cell;
+            var attacker_tip = attacker_cell.fig.tip;
 
             play_sound(attack_sound);
 
@@ -136,7 +148,23 @@ var board = {};
                 this.clear_avaible();
                 this.clear_moved();
                 this.player_color = this.player_color == 'white' ? 'black' : 'white';
+                this.last_action = {
+                    type: 'attack_kill_move',
+                    from: attacker_cell.id,
+                    to: target_cell.id,
+                    piece: attacker_tip
+                };
                 //save_board();
+            }
+
+            if (this.last_action === null) {
+                this.last_action = {
+                    type: 'attack_hit',
+                    from: attacker_cell.id,
+                    to: target_cell.id,
+                    piece: attacker_tip,
+                    target_hp: cell.fig.hp
+                };
             }
 
             this.selected_cell.fig.moved = true;

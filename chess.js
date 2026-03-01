@@ -2,16 +2,114 @@
 var check_timer = null;
 var move_sound = null;
 var attack_sound = null;
+var sound_enabled = true;
+var sound_volume = 0.7;
 
 function play_sound(sound) {
-    if (!sound) {
+    if (!sound || !sound_enabled) {
         return;
     }
 
+    sound.volume = sound_volume;
     sound.currentTime = 0;
     sound.play().catch(function () {
         // Автовоспроизведение может быть ограничено браузером до первого клика пользователя.
     });
+}
+
+function apply_sound_settings() {
+    if (move_sound) {
+        move_sound.volume = sound_volume;
+    }
+
+    if (attack_sound) {
+        attack_sound.volume = sound_volume;
+    }
+
+    $('#sound_enabled').prop('checked', sound_enabled);
+    $('#sound_volume').val(Math.round(sound_volume * 100));
+    $('#sound_volume_value').text(Math.round(sound_volume * 100) + '%');
+}
+
+function init_sound_controls() {
+    var saved_enabled = localStorage.getItem('sound_enabled');
+    var saved_volume = localStorage.getItem('sound_volume');
+
+    if (saved_enabled !== null) {
+        sound_enabled = saved_enabled === '1';
+    }
+
+    if (saved_volume !== null) {
+        var parsed = parseFloat(saved_volume);
+        if (!isNaN(parsed)) {
+            sound_volume = Math.max(0, Math.min(1, parsed));
+        }
+    }
+
+    apply_sound_settings();
+
+    $('#sound_enabled').on('change', function () {
+        sound_enabled = $(this).is(':checked');
+        localStorage.setItem('sound_enabled', sound_enabled ? '1' : '0');
+        apply_sound_settings();
+    });
+
+    $('#sound_volume').on('input change', function () {
+        sound_volume = parseInt($(this).val(), 10) / 100;
+        localStorage.setItem('sound_volume', sound_volume);
+        apply_sound_settings();
+    });
+}
+
+
+function cell_to_notation(cell_id) {
+    var col = parseInt(cell_id[1], 10);
+    var row = parseInt(cell_id[0], 10);
+    var file = 'abcdefgh'[col];
+    var rank = 8 - row;
+    return file + rank;
+}
+
+function append_game_log(action) {
+    if (!action) {
+        return;
+    }
+
+    var piece_name = {
+        p: 'Пешка',
+        l: 'Ладья',
+        k: 'Конь',
+        s: 'Слон',
+        f: 'Ферзь',
+        kr: 'Король'
+    };
+
+    var from = cell_to_notation(action.from);
+    var to = cell_to_notation(action.to);
+    var piece = piece_name[action.piece] || action.piece;
+    var text = '';
+
+    if (action.type === 'move') {
+        text = piece + ': ход ' + from + ' → ' + to;
+    }
+
+    if (action.type === 'attack_hit') {
+        text = piece + ': атака ' + from + ' → ' + to + ' (враг выжил, HP: ' + action.target_hp + ')';
+    }
+
+    if (action.type === 'attack_kill_move') {
+        text = piece + ': добивание ' + from + ' → ' + to + ' (клетка занята атакующей фигурой)';
+    }
+
+    if (!text) {
+        return;
+    }
+
+    if ($('#game_log .game-log-empty').length) {
+        $('#game_log').html('');
+    }
+
+    $('#game_log').prepend('<div class="game-log-item">' + text + '</div>');
 }
 
 $(document).ready(
@@ -33,6 +131,7 @@ $(document).ready(
 
         move_sound = new Audio('_mp3/mix3.mp3');
         attack_sound = new Audio('_mp3/gun2.mp3');
+        init_sound_controls();
 
 	}
 );
