@@ -116,6 +116,18 @@ body {
     text-align: center;
 }
 
+
+.board-main {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.board-stage {
+    display: flex;
+    flex-direction: column;
+}
+
 .status-bar {
     margin-top: 14px;
     padding: 10px 12px;
@@ -196,8 +208,9 @@ body {
 
 
 .board-log {
-    margin-top: 12px;
-    max-width: 578px;
+    margin-top: 0;
+    width: 280px;
+    min-height: 578px;
 }
 
 .game-log-content {
@@ -226,6 +239,15 @@ body {
 @media (max-width: 1100px) {
     .layout {
         grid-template-columns: 1fr;
+    }
+
+    .board-main {
+        flex-direction: column;
+    }
+
+    .board-log {
+        width: 100%;
+        min-height: auto;
     }
 
     .controls-panel {
