@@ -1,8 +1,18 @@
 
 var check_timer = null;
+var clock_timer = null;
 var move_sound = null;
 var attack_sound = null;
 var sound_enabled = true;
+
+var INITIAL_CLOCK_MS = 5 * 60 * 1000;
+var clock_state = {
+    white_ms: INITIAL_CLOCK_MS,
+    black_ms: INITIAL_CLOCK_MS,
+    last_tick: null,
+    running: false
+};
+
 var sound_volume = 0.7;
 
 function play_sound(sound) {
@@ -22,6 +32,79 @@ function play_sound(sound) {
             // Автовоспроизведение может быть ограничено браузером до первого клика пользователя.
         });
     }
+}
+
+
+function format_clock(ms) {
+    var total_sec = Math.max(0, Math.floor(ms / 1000));
+    var min = Math.floor(total_sec / 60);
+    var sec = total_sec % 60;
+    return (min < 10 ? '0' + min : '' + min) + ':' + (sec < 10 ? '0' + sec : '' + sec);
+}
+
+function render_clock() {
+    $('#clock_white .clock-time').text(format_clock(clock_state.white_ms));
+    $('#clock_black .clock-time').text(format_clock(clock_state.black_ms));
+
+    $('#clock_white').toggleClass('active', board.player_color === 'white');
+    $('#clock_black').toggleClass('active', board.player_color === 'black');
+}
+
+function reset_clock() {
+    clock_state.white_ms = INITIAL_CLOCK_MS;
+    clock_state.black_ms = INITIAL_CLOCK_MS;
+    clock_state.last_tick = Date.now();
+    clock_state.running = true;
+    render_clock();
+}
+
+function stop_clock() {
+    if (clock_timer !== null) {
+        clearInterval(clock_timer);
+        clock_timer = null;
+    }
+    clock_state.running = false;
+}
+
+function tick_clock() {
+    if (!clock_state.running) {
+        return;
+    }
+
+    var now = Date.now();
+    if (clock_state.last_tick === null) {
+        clock_state.last_tick = now;
+        return;
+    }
+
+    var elapsed = now - clock_state.last_tick;
+    clock_state.last_tick = now;
+
+    if (board.player_color === 'white') {
+        clock_state.white_ms = Math.max(0, clock_state.white_ms - elapsed);
+    } else if (board.player_color === 'black') {
+        clock_state.black_ms = Math.max(0, clock_state.black_ms - elapsed);
+    }
+
+    render_clock();
+
+    if (clock_state.white_ms === 0 || clock_state.black_ms === 0) {
+        stop_clock();
+        if (clock_state.white_ms === 0) {
+            $('#div_info').html('Время белых вышло');
+        }
+        if (clock_state.black_ms === 0) {
+            $('#div_info').html('Время чёрных вышло');
+        }
+    }
+}
+
+function start_clock() {
+    stop_clock();
+    clock_state.running = true;
+    clock_state.last_tick = Date.now();
+    render_clock();
+    clock_timer = setInterval(tick_clock, 1000);
 }
 
 function apply_sound_settings() {
@@ -159,6 +242,9 @@ $(document).ready(
 
         init_sound_controls();
 
+        reset_clock();
+        start_clock();
+
 	}
 );
 
@@ -202,6 +288,8 @@ $(document).ready(
             success: function(msg){
                 $('#div_info').html(msg.msg);
                 board.game_id = msg.game_id;
+                reset_clock();
+                start_clock();
                 get_games_list();
                 save_board();
             }
@@ -222,6 +310,8 @@ $(document).ready(
                 $('#div_info').html(msg.msg+' '+game_id);
                 board.game_id = game_id;
                 board.player_color = 'black';
+                reset_clock();
+                start_clock();
                 get_my_games();
                 save_board();
             }
@@ -243,6 +333,8 @@ $(document).ready(
                 $('#div_info').html(msg.msg+' '+game_id);
                 board.game_id = game_id;
                 board.player_color = msg.color;
+                reset_clock();
+                start_clock();
                 load_board();
             }
         });
@@ -284,6 +376,7 @@ $(document).ready(
                 board.cells = JSON.parse(msg.board_str).cells;
                 $("#board").html(board.gethtml());
                 $('#div_info').html(msg.msg);
+                render_clock();
             }
         });
 
@@ -310,6 +403,7 @@ $(document).ready(
                     board.move_over = false;
                 }
                 $('#div_info').html(msg.msg);
+                render_clock();
             }
         });
 
@@ -397,6 +491,7 @@ $(document).ready(
 
         if (click_result === 'done') {
             append_game_log(board.last_action);
+            render_clock();
         }
 
     }

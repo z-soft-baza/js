@@ -20,6 +20,17 @@
             <div id="game_title" class="game-title"></div>
         </div>
 
+        <div class="chess-clock" aria-live="polite">
+            <div id="clock_white" class="clock-side active">
+                <span class="clock-label">Белые</span>
+                <span class="clock-time">05:00</span>
+            </div>
+            <div id="clock_black" class="clock-side">
+                <span class="clock-label">Чёрные</span>
+                <span class="clock-time">05:00</span>
+            </div>
+        </div>
+
         <div id="wrap">
             <div id="board_top"></div>
             <div id="board">
@@ -62,6 +73,14 @@
                 </select>
             </div>
         </div>
+
+        <div id="tab-settings" class="tab-pane" role="tabpanel">
+            <div class="control-group">
+                <h2>Ход</h2>
+                <button type="button" class="btn btn-primary" onclick="save_board();">Закончить ход</button>
+                <button type="button" class="btn" onclick="load_board();">Забрать доску</button>
+            </div>
+        </div>
         
         
         <div id="tab-settings" class="tab-pane" role="tabpanel">
@@ -79,24 +98,27 @@
 	            </div>
 	        </div>
 
-	        <div class="control-group">
-	            <h2>Игрок</h2>
-	            <div class="inline-controls">
-	                <button type="button" class="btn" onclick="get_games_list();">Обновить</button>
-	                <button type="button" class="btn btn-primary" onclick="create_new_game();">Создать</button>
-	            </div>
+            <div class="control-group">
+                <h2>Профиль</h2>
+                <div class="inline-controls">
+                    <input type="text" id="player_name" value="Новый игрок">
+                    <button type="button" class="btn" onclick="update_player();">Сохранить</button>
+                </div>
+            </div>
 
-	            <div class="control-group">
-	                <h2>Профиль</h2>
-	                <div class="inline-controls">
-	                    <input type="text" id="player_name" value="Новый игрок">
-	                    <button type="button" class="btn" onclick="update_player();">Сохранить</button>
-	                </div>
-	            </div>
-
-	        </div>
-        
-       </div>
+            <div class="control-group">
+                <h2>Звук</h2>
+                <label class="sound-toggle" for="sound_enabled">
+                    <input type="checkbox" id="sound_enabled" checked>
+                    <span>Звук вкл/выкл</span>
+                </label>
+                <label class="list-title" for="sound_volume">Громкость</label>
+                <div class="sound-volume-row">
+                    <input type="range" id="sound_volume" min="0" max="100" value="70">
+                    <span id="sound_volume_value">70%</span>
+                </div>
+            </div>
+        </div>
 
     </aside>
 </div>
