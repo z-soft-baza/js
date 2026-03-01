@@ -87,3 +87,35 @@ input[type="text"] {
     font-size: 12px;
     letter-spacing: 0.3px;
 }
+
+
+.sound-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    color: #e5e7eb;
+}
+
+.sound-toggle input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+}
+
+.sound-volume-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#sound_volume {
+    width: 100%;
+    accent-color: #16a34a;
+}
+
+#sound_volume_value {
+    min-width: 44px;
+    text-align: right;
+    color: #d1d5db;
+    font-size: 13px;
+}
