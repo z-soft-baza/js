@@ -240,6 +240,7 @@ board.gethtml = function (){
         };
     	return str;        
         
+//--------------------------------------------------------------
 
     if (this.player_color=='white') {
         for (var row = 0; row < 8; row++){
