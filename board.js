@@ -231,6 +231,15 @@ board.clear_moved = function () {
 
 board.gethtml = function (){
     var	str ='';
+    
+        for (var row = 0; row < 8; row++){
+            for (var col = 0; col < 8; col++){
+                str += this.cell_html(this.cells[row][col]);
+            };
+            str += '<br>';    
+        };
+    	return str;        
+        
 
     if (this.player_color=='white') {
         for (var row = 0; row < 8; row++){
@@ -254,12 +263,16 @@ board.gethtml = function (){
 
 
 // =============================================================================================================
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+async function demo() {
+        await sleep(2000);
+}
 
 
 	board.avaible_move = function(cell) {
         this.clear_avaible();
-
-	 sleep(2000);
 
 
         if (this.move_over) {
