@@ -267,8 +267,12 @@ $(document).ready(
     function oncellclick(div){
 
         //console.log('chess onclick '+board.last_cell.fig);
-        board.cell_click(div.id);
+        var click_result = board.cell_click(div.id);
         $("#board").html(board.gethtml());
+
+        if (click_result === 'done') {
+            append_game_log(board.last_action);
+        }
 
     }
     function start_check_timer(){
