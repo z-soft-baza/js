@@ -1,5 +1,18 @@
 
 var check_timer = null;
+var move_sound = null;
+var attack_sound = null;
+
+function play_sound(sound) {
+    if (!sound) {
+        return;
+    }
+
+    sound.currentTime = 0;
+    sound.play().catch(function () {
+        // Автовоспроизведение может быть ограничено браузером до первого клика пользователя.
+    });
+}
 
 $(document).ready(
 
@@ -18,11 +31,8 @@ $(document).ready(
         get_games_list();
         get_my_games();
 
-//        enemy_mp3 = new Audio();
-//        enemy_mp3.src = '_mp3/gun2.mp3';
-//
-//        death_mp3 = new Audio();
-//        death_mp3.src = '_mp3/mix3.mp3';
+        move_sound = new Audio('_mp3/mix3.mp3');
+        attack_sound = new Audio('_mp3/gun2.mp3');
 
 	}
 );
