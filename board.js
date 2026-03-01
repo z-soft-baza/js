@@ -111,6 +111,7 @@ var board = {};
             this.clear_moved();
 
             this.player_color = this.player_color == 'white' ? 'black' : 'white';
+            $('#div_info').html('Ход ' + this.player_color);
             //save_board();
             return 'done';
         }
@@ -264,12 +265,12 @@ board.gethtml = function (){
 
 
 // =============================================================================================================
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-async function demo() {
-        await sleep(2000);
-}
+//    function sleep(ms) {
+//        return new Promise(resolve => setTimeout(resolve, ms));
+//    }
+//    async function demo() {
+//            await sleep(2000);
+//    }
 
 
 	board.avaible_move = function(cell) {
