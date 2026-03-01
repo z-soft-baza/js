@@ -1,4 +1,6 @@
 
+var check_timer = null;
+
 $(document).ready(
 
 	function(){
@@ -9,8 +11,9 @@ $(document).ready(
 	    $("#board").html(board.gethtml());
 
 
-        $('.cell').live("click", function(){ setTimeout(oncellclick(this), 2000);});
-//        $('.cell').live("click", function(){oncellclick(this);});
+        $(document).on("click", ".cell", function(){
+            oncellclick(this);
+        });
 
         get_games_list();
         get_my_games();
@@ -25,16 +28,11 @@ $(document).ready(
 );
 
 
-    function getFnName(fn) {
-      return fn.toString().match(/function ([^(]*)\(/)[1];
-    }
-
-
     function get_games_list(){
 
         $.ajax({
             type: "POST", url: "ajax.php", dataType : 'json',
-            data: { ajax_type: getFnName(arguments.callee) },
+            data: { ajax_type: 'get_games_list' },
 
             success: function(msg){
                 $('#games_list').html(msg.games_list);
@@ -48,7 +46,7 @@ $(document).ready(
 
         $.ajax({
             type: "POST", url: "ajax.php", dataType : 'json',
-            data: { ajax_type: getFnName(arguments.callee),
+            data: { ajax_type: 'get_my_games',
                     player_id: player_id},
 
             success: function(msg){
@@ -63,7 +61,7 @@ $(document).ready(
 
         $.ajax({
             type: "POST", url: "ajax.php", dataType : 'json',
-            data: { ajax_type: getFnName(arguments.callee),
+            data: { ajax_type: 'create_new_game',
                     player_id: player_id},
 
             success: function(msg){
@@ -81,7 +79,7 @@ $(document).ready(
 
         $.ajax({
             type: "POST", url: "ajax.php", dataType : 'json',
-            data: { ajax_type: getFnName(arguments.callee),
+            data: { ajax_type: 'join_game',
                     game_id: game_id,
                     player_id: player_id},
 
@@ -102,7 +100,7 @@ $(document).ready(
 
         $.ajax({
             type: "POST", url: "ajax.php", dataType : 'json',
-            data: { ajax_type: getFnName(arguments.callee),
+            data: { ajax_type: 'resume_game',
                 game_id: game_id,
                 player_id: player_id},
 
@@ -122,7 +120,7 @@ $(document).ready(
 
         $.ajax({
             type: "POST", url: "ajax.php", dataType : 'json',
-            data: { ajax_type: getFnName(arguments.callee),
+            data: { ajax_type: 'save_board',
                     game_id: board.game_id,
                     last_move: board.player_color,
                     board_str: JSON.stringify(board) },
@@ -130,7 +128,7 @@ $(document).ready(
             success: function(msg){
                 $('#div_info').html(msg.msg);
                 board.move_over = true;
-                check_timer = setInterval(check_board, 3000);
+                start_check_timer();
             }
         });
 
@@ -143,7 +141,7 @@ $(document).ready(
 
         $.ajax({
             type: "POST", url: "ajax.php", dataType : 'json',
-            data: { ajax_type: getFnName(arguments.callee),
+            data: { ajax_type: 'load_board',
                     game_id: board.game_id,
                     my_color: board.player_color},
 
@@ -165,7 +163,7 @@ $(document).ready(
 
         $.ajax({
             type: "POST", url: "ajax.php", dataType : 'json',
-            data: { ajax_type: getFnName(arguments.callee),
+            data: { ajax_type: 'check_board',
                 game_id: board.game_id,
                 my_color: board.player_color},
 
@@ -173,7 +171,7 @@ $(document).ready(
                 if (msg.msg!='Противник думает..') {
                     board.cells = JSON.parse(msg.board_str).cells;
                     $("#board").html(board.gethtml());
-                    clearInterval(check_timer);
+                    stop_check_timer();
                     board.move_over = false;
                 }
                 $('#div_info').html(msg.msg);
@@ -209,7 +207,7 @@ $(document).ready(
 
         $.ajax({
             type: "POST", url: "ajax.php", dataType : 'json',
-            data: { ajax_type: getFnName(arguments.callee),
+            data: { ajax_type: 'load_player',
                 player_id: player_id},
 
             success: function(msg){
@@ -226,7 +224,7 @@ $(document).ready(
 
         $.ajax({
             type: "POST", url: "ajax.php", dataType : 'json',
-            data: { ajax_type: getFnName(arguments.callee),
+            data: { ajax_type: 'create_player',
                 player_name: $('#player_name').val()},
 
             success: function(msg){
@@ -243,7 +241,7 @@ $(document).ready(
 
         $.ajax({
             type: "POST", url: "ajax.php", dataType : 'json',
-            data: { ajax_type: getFnName(arguments.callee),
+            data: { ajax_type: 'update_player',
                 player_id: player_id,
                 player_name: $('#player_name').val(),
             },
@@ -262,4 +260,15 @@ $(document).ready(
         board.cell_click(div.id);
         $("#board").html(board.gethtml());
 
+    }
+    function start_check_timer(){
+        stop_check_timer();
+        check_timer = setInterval(check_board, 3000);
+    }
+
+    function stop_check_timer(){
+        if (check_timer !== null) {
+            clearInterval(check_timer);
+            check_timer = null;
+        }
     }
