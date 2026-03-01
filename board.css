@@ -1,0 +1,104 @@
+
+.cell {
+	display: inline-block;
+	background-repeat: no-repeat;
+	width: 60px;
+	height: 60px;
+	cursor: pointer;
+	
+	size:50%;
+	background-color: black;
+	background-position: 50% 0%;
+	background-size: auto 100%;
+	background-repeat: no-repeat;
+	border:1px solid black;
+	
+}
+
+#wrap {
+    margin: 5%;
+    margin-right: 100px;
+    width:578px;
+    height:578px;
+    background-image: url(img/chess/doska.jpg);
+    background-repeat: no-repeat;
+    background-size: auto 100%;
+
+}
+
+#board_top {
+    height: 40px;
+}
+
+
+#board {
+	text-align: center;
+	/*border:5px solid D18B47;*/
+	text-align: center;
+}
+
+.odd {
+	background-color: #FFCE9E;
+}
+
+.even {
+	background-color: #D18B47;
+}
+
+.selected {
+    background-color: red;
+
+}
+
+
+.em {cursor: default;}
+.wp {background-image: url(img/chess/wp.png);}
+.wl {background-image: url(img/chess/wl.png);}
+.wk {background-image: url(img/chess/wk.png);}
+.ws {background-image: url(img/chess/ws.png);}
+.wkr {background-image: url(img/chess/wkr.png);}
+.wf {background-image: url(img/chess/wf.png);}
+.bp {background-image: url(img/chess/bp.png);}
+.bl {background-image: url(img/chess/bl.png);}
+.bk {background-image: url(img/chess/bk.png);}
+.bs {background-image: url(img/chess/bs.png);}
+.bkr {background-image: url(img/chess/bkr.png);}
+.bf {background-image: url(img/chess/bf.png);}
+
+
+.avaible {
+    background-color: green;
+    cursor: pointer;
+}
+
+
+.enemy {
+    background-color: yellow;
+    cursor: pointer;
+}
+
+.hp {
+    background: none repeat scroll 0 0 #228B22;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    font: 12px helvetica;
+    height: 15px;
+    margin: 42px 0 0 42px;
+    position: absolute;
+    width: 15px;
+}
+
+
+.atack {
+    background: none repeat scroll 0 0 #FF8C00;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    font: 12px helvetica;
+    height: 15px;
+    margin: 42px 0 0 2px;
+    position: absolute;
+    width: 15px;
+}
+
+
+

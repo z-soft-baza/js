@@ -1,0 +1,59 @@
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" >
+    <link href="board.css" type="text/css" rel="stylesheet" >
+    <link href="m.css" type="text/css" rel="stylesheet" >
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <!--<script src="jquery.js"></script>-->
+    <script type="text/javascript" src="board.js"></script>
+    <script type="text/javascript" src="chess.js"></script>
+
+
+    <title>jsChess</title>
+    	
+</head>
+<body>
+
+
+<table><tr><td>
+
+    <div id="game_title"></div>
+
+    <div id="wrap">
+        <div id="board_top"></div>
+        <div id="board">
+        ...text...
+        </div>
+    </div>
+
+</td>
+<td>
+    <input type="button" value="Закончить ход" onclick="save_board();"><br><br><br>
+    <input type="button" value="Забрать доску" onclick="load_board();">
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <input type="text" id="player_name" value="Новый игрок"> <input type="button" value="Сохранить" onclick="update_player();"><br>
+    <input type="button" value="Обновить" onclick="get_games_list();">
+    <input type="button" value="Создать" onclick="create_new_game();"><br>
+
+
+    <select id="games_list" size="10" ondblclick="join_game(this.value)">
+        <option>...</option>
+    </select>
+
+    <select id="my_games" size="10" ondblclick="resume_game(this.value)">
+        <option>...</option>
+    </select>
+
+    <div id="div_info"></div>
+
+</td></tr></table>
+
+
+
+
+
+</body>
