@@ -80,6 +80,23 @@
                 <button type="button" class="btn btn-primary" onclick="save_board();">Закончить ход</button>
                 <button type="button" class="btn" onclick="load_board();">Забрать доску</button>
             </div>
+        </div>
+        
+        
+        <div id="tab-settings" class="tab-pane" role="tabpanel">
+        
+	        <div class="control-group">
+	            <h2>Звук</h2>
+	            <label class="sound-toggle" for="sound_enabled">
+	                <input type="checkbox" id="sound_enabled" checked>
+	                <span>Звук вкл/выкл</span>
+	            </label>
+	            <label class="list-title" for="sound_volume">Громкость</label>
+	            <div class="sound-volume-row">
+	                <input type="range" id="sound_volume" min="0" max="100" value="70">
+	                <span id="sound_volume_value">70%</span>
+	            </div>
+	        </div>
 
             <div class="control-group">
                 <h2>Профиль</h2>
