@@ -11,10 +11,17 @@ function play_sound(sound) {
     }
 
     sound.volume = sound_volume;
-    sound.currentTime = 0;
-    sound.play().catch(function () {
-        // Автовоспроизведение может быть ограничено браузером до первого клика пользователя.
-    });
+
+    if (sound.readyState > 0) {
+        sound.currentTime = 0;
+    }
+
+    var play_result = sound.play();
+    if (play_result && typeof play_result.catch === 'function') {
+        play_result.catch(function () {
+            // Автовоспроизведение может быть ограничено браузером до первого клика пользователя.
+        });
+    }
 }
 
 function apply_sound_settings() {
@@ -131,6 +138,10 @@ $(document).ready(
 
         move_sound = new Audio('_mp3/mix3.mp3');
         attack_sound = new Audio('_mp3/gun2.mp3');
+
+        move_sound.preload = 'auto';
+        attack_sound.preload = 'auto';
+
         init_sound_controls();
 
 	}
