@@ -38,17 +38,28 @@
     </section>
 
     <aside class="controls-panel card">
-        <div class="control-group">
-            <h2>Ход</h2>
-            <button type="button" class="btn btn-primary" onclick="save_board();">Закончить ход</button>
-            <button type="button" class="btn" onclick="load_board();">Забрать доску</button>
+        <div class="tabs" role="tablist" aria-label="Панель управления">
+            <button type="button" class="tab-btn active" role="tab" aria-selected="true" data-tab="tab-games">Игры</button>
+            <button type="button" class="tab-btn" role="tab" aria-selected="false" data-tab="tab-settings">Прочее</button>
         </div>
 
-        <div class="control-group">
-            <h2>Профиль</h2>
-            <div class="inline-controls">
-                <input type="text" id="player_name" value="Новый игрок">
-                <button type="button" class="btn" onclick="update_player();">Сохранить</button>
+        <div id="tab-games" class="tab-pane active" role="tabpanel">
+            <div class="control-group">
+                <h2>Игры</h2>
+                <div class="inline-controls">
+                    <button type="button" class="btn" onclick="get_games_list();">Обновить</button>
+                    <button type="button" class="btn btn-primary" onclick="create_new_game();">Создать</button>
+                </div>
+
+                <label class="list-title" for="games_list">Открытые партии (двойной клик — подключиться)</label>
+                <select id="games_list" size="10" ondblclick="join_game(this.value)">
+                    <option>...</option>
+                </select>
+
+                <label class="list-title" for="my_games">Мои партии (двойной клик — продолжить)</label>
+                <select id="my_games" size="10" ondblclick="resume_game(this.value)">
+                    <option>...</option>
+                </select>
             </div>
         </div>
 
@@ -72,15 +83,26 @@
                 <button type="button" class="btn btn-primary" onclick="create_new_game();">Создать</button>
             </div>
 
-            <label class="list-title" for="games_list">Открытые партии (двойной клик — подключиться)</label>
-            <select id="games_list" size="10" ondblclick="join_game(this.value)">
-                <option>...</option>
-            </select>
+            <div class="control-group">
+                <h2>Профиль</h2>
+                <div class="inline-controls">
+                    <input type="text" id="player_name" value="Новый игрок">
+                    <button type="button" class="btn" onclick="update_player();">Сохранить</button>
+                </div>
+            </div>
 
-            <label class="list-title" for="my_games">Мои партии (двойной клик — продолжить)</label>
-            <select id="my_games" size="10" ondblclick="resume_game(this.value)">
-                <option>...</option>
-            </select>
+            <div class="control-group">
+                <h2>Звук</h2>
+                <label class="sound-toggle" for="sound_enabled">
+                    <input type="checkbox" id="sound_enabled" checked>
+                    <span>Звук вкл/выкл</span>
+                </label>
+                <label class="list-title" for="sound_volume">Громкость</label>
+                <div class="sound-volume-row">
+                    <input type="range" id="sound_volume" min="0" max="100" value="70">
+                    <span id="sound_volume_value">70%</span>
+                </div>
+            </div>
         </div>
 
     </aside>

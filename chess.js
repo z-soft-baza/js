@@ -38,6 +38,19 @@ function apply_sound_settings() {
     $('#sound_volume_value').text(Math.round(sound_volume * 100) + '%');
 }
 
+
+function init_control_tabs() {
+    $(document).on('click', '.tab-btn', function () {
+        var tab_id = $(this).data('tab');
+
+        $('.tab-btn').removeClass('active').attr('aria-selected', 'false');
+        $(this).addClass('active').attr('aria-selected', 'true');
+
+        $('.tab-pane').removeClass('active');
+        $('#' + tab_id).addClass('active');
+    });
+}
+
 function init_sound_controls() {
     var saved_enabled = localStorage.getItem('sound_enabled');
     var saved_volume = localStorage.getItem('sound_volume');
@@ -132,6 +145,8 @@ $(document).ready(
         $(document).on("click", ".cell", function(){
             oncellclick(this);
         });
+
+        init_control_tabs();
 
         get_games_list();
         get_my_games();
