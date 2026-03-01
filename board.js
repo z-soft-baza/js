@@ -99,10 +99,8 @@ var board = {};
 	board.cell_click = function(cell_id) {
 
 		cell = this.cellbyid(cell_id);
-        this.last_action = null;
 
         if (cell.avaible) {
-            var from_cell = this.selected_cell;
             var f = cell.fig;
                 f.tip = 'em';
                 f.color = 'none';
