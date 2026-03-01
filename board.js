@@ -121,7 +121,8 @@ var board = {};
                 type: 'move',
                 from: from_cell.id,
                 to: cell.id,
-                piece: cell.fig.tip
+                piece: cell.fig.tip,
+                color: cell.fig.color
             };
             $('#div_info').html('Ход ' + this.player_color);
             //save_board();
@@ -134,6 +135,7 @@ var board = {};
             var attacker_cell = this.selected_cell;
             var target_cell = cell;
             var attacker_tip = attacker_cell.fig.tip;
+            var attacker_color = attacker_cell.fig.color;
 
             play_sound(attack_sound);
 
@@ -154,7 +156,8 @@ var board = {};
                     type: 'attack_kill_move',
                     from: attacker_cell.id,
                     to: target_cell.id,
-                    piece: attacker_tip
+                    piece: attacker_tip,
+                    color: attacker_color
                 };
                 //save_board();
             }
@@ -165,6 +168,7 @@ var board = {};
                     from: attacker_cell.id,
                     to: target_cell.id,
                     piece: attacker_tip,
+                    color: attacker_color,
                     target_hp: cell.fig.hp
                 };
             }

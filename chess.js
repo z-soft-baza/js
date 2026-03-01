@@ -190,18 +190,19 @@ function append_game_log(action) {
     var from = cell_to_notation(action.from);
     var to = cell_to_notation(action.to);
     var piece = piece_name[action.piece] || action.piece;
+    var color_name = action.color === 'white' ? 'Белые' : (action.color === 'black' ? 'Чёрные' : 'Неизвестный цвет');
     var text = '';
 
     if (action.type === 'move') {
-        text = piece + ': ход ' + from + ' → ' + to;
+        text = color_name + ' ' + piece + ': ход ' + from + ' → ' + to;
     }
 
     if (action.type === 'attack_hit') {
-        text = piece + ': атака ' + from + ' → ' + to + ' (враг выжил, HP: ' + action.target_hp + ')';
+        text = color_name + ' ' + piece + ': атака ' + from + ' → ' + to + ' (враг выжил, HP: ' + action.target_hp + ')';
     }
 
     if (action.type === 'attack_kill_move') {
-        text = piece + ': добивание ' + from + ' → ' + to + ' (клетка занята атакующей фигурой)';
+        text = color_name + ' ' + piece + ': добивание ' + from + ' → ' + to + ' (клетка занята атакующей фигурой)';
     }
 
     if (!text) {
