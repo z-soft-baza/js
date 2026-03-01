@@ -1,7 +1,89 @@
-#games_list, #my_games {
-    width: 160px;
-
+.controls-panel {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
+.control-group {
+    background: rgba(17, 24, 39, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 14px;
+}
 
+.control-group h2 {
+    margin: 0 0 10px;
+    font-size: 15px;
+    color: #d1d5db;
+}
 
+.inline-controls {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.btn,
+input[type="text"],
+#games_list,
+#my_games {
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: #0f172a;
+    color: #e5e7eb;
+    font-size: 14px;
+}
+
+.btn {
+    cursor: pointer;
+    padding: 8px 12px;
+    transition: background .2s ease, transform .08s ease;
+}
+
+.btn:hover {
+    background: #1e293b;
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn-primary {
+    background: #16a34a;
+    border-color: rgba(22, 163, 74, 0.8);
+    color: #f0fdf4;
+}
+
+.btn-primary:hover {
+    background: #15803d;
+}
+
+input[type="text"] {
+    padding: 8px 10px;
+    outline: none;
+    width: 100%;
+    min-width: 140px;
+}
+
+#games_list,
+#my_games {
+    width: 100%;
+    min-height: 170px;
+    padding: 8px;
+    outline: none;
+}
+
+#games_list option,
+#my_games option {
+    padding: 6px;
+}
+
+.list-title {
+    display: block;
+    margin: 8px 0 8px;
+    color: #9ca3af;
+    font-size: 12px;
+    letter-spacing: 0.3px;
+}

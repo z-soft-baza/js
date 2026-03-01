@@ -1,6 +1,7 @@
 <html>
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" >
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="board.css" type="text/css" rel="stylesheet" >
     <link href="m.css" type="text/css" rel="stylesheet" >
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -8,52 +9,61 @@
     <script type="text/javascript" src="board.js"></script>
     <script type="text/javascript" src="chess.js"></script>
 
-
     <title>jsChess</title>
-    	
 </head>
 <body>
 
-
-<table><tr><td>
-
-    <div id="game_title"></div>
-
-    <div id="wrap">
-        <div id="board_top"></div>
-        <div id="board">
-        ...text...
+<div class="layout">
+    <section class="board-panel card">
+        <div class="card-header">
+            <h1>jsChess</h1>
+            <div id="game_title" class="game-title"></div>
         </div>
-    </div>
 
-</td>
-<td>
-    <input type="button" value="Закончить ход" onclick="save_board();"><br><br><br>
-    <input type="button" value="Забрать доску" onclick="load_board();">
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <input type="text" id="player_name" value="Новый игрок"> <input type="button" value="Сохранить" onclick="update_player();"><br>
-    <input type="button" value="Обновить" onclick="get_games_list();">
-    <input type="button" value="Создать" onclick="create_new_game();"><br>
+        <div id="wrap">
+            <div id="board_top"></div>
+            <div id="board">
+                ...text...
+            </div>
+        </div>
 
+        <div id="div_info" class="status-bar">Готов к игре</div>
+    </section>
 
-    <select id="games_list" size="10" ondblclick="join_game(this.value)">
-        <option>...</option>
-    </select>
+    <aside class="controls-panel card">
+        <div class="control-group">
+            <h2>Ход</h2>
+            <button type="button" class="btn btn-primary" onclick="save_board();">Закончить ход</button>
+            <button type="button" class="btn" onclick="load_board();">Забрать доску</button>
+        </div>
 
-    <select id="my_games" size="10" ondblclick="resume_game(this.value)">
-        <option>...</option>
-    </select>
+        <div class="control-group">
+            <h2>Профиль</h2>
+            <div class="inline-controls">
+                <input type="text" id="player_name" value="Новый игрок">
+                <button type="button" class="btn" onclick="update_player();">Сохранить</button>
+            </div>
+        </div>
 
-    <div id="div_info"></div>
+        <div class="control-group">
+            <h2>Игры</h2>
+            <div class="inline-controls">
+                <button type="button" class="btn" onclick="get_games_list();">Обновить</button>
+                <button type="button" class="btn btn-primary" onclick="create_new_game();">Создать</button>
+            </div>
 
-</td></tr></table>
+            <label class="list-title" for="games_list">Открытые партии (двойной клик — подключиться)</label>
+            <select id="games_list" size="10" ondblclick="join_game(this.value)">
+                <option>...</option>
+            </select>
 
-
-
-
+            <label class="list-title" for="my_games">Мои партии (двойной клик — продолжить)</label>
+            <select id="my_games" size="10" ondblclick="resume_game(this.value)">
+                <option>...</option>
+            </select>
+        </div>
+    </aside>
+</div>
 
 </body>
+</html>
