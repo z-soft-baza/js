@@ -96,13 +96,15 @@ var board = {};
 // =============================================================================================================
 	board.cell_click = function(cell_id) {
 
-		cell = this.cellbyid(cell_id);
+		var cell = this.cellbyid(cell_id);
 
         if (cell.avaible) {
+            var from_cell = this.selected_cell;
+            var moved_fig = this.selected_cell.fig;
             var f = cell.fig;
                 f.tip = 'em';
                 f.color = 'none';
-            cell.fig = this.selected_cell.fig;
+            cell.fig = moved_fig;
             this.selected_cell.fig = f;
 
 
@@ -113,13 +115,26 @@ var board = {};
             this.player_color = this.player_color == 'white' ? 'black' : 'white';
             $('#div_info').html('Ход ' + this.player_color);
             //save_board();
-            return 'done';
+            return {
+                type: 'move',
+                piece: moved_fig.tip,
+                color: moved_fig.color,
+                from: from_cell.id,
+                to: cell.id
+            };
         }
 
 
         if (cell.enemy) {
 
             //enemy_mp3.play();
+
+            var from_cell = this.selected_cell;
+            var moved_fig = this.selected_cell.fig;
+            var target_fig = {
+                tip: cell.fig.tip,
+                color: cell.fig.color
+            };
 
             cell.fig.hp -= this.selected_cell.fig.atack;
             if (cell.fig.hp<=0) {
@@ -140,7 +155,15 @@ var board = {};
             this.selected_cell.fig.moved = true;
             this.clear_selected();
             this.clear_avaible();
-            return 'done';
+            return {
+                type: 'attack',
+                piece: moved_fig.tip,
+                color: moved_fig.color,
+                from: from_cell.id,
+                to: cell.id,
+                target: target_fig.tip,
+                target_color: target_fig.color
+            };
         }
 
         if (cell.selected){
