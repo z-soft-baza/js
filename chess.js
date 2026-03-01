@@ -1,5 +1,16 @@
 
 var check_timer = null;
+var move_log = [];
+
+var figure_names = {
+    p: "Пешка",
+    l: "Ладья",
+    k: "Конь",
+    s: "Слон",
+    f: "Ферзь",
+    kr: "Король"
+};
+
 
 $(document).ready(
 
@@ -9,7 +20,7 @@ $(document).ready(
         init_player();
 
 	    $("#board").html(board.gethtml());
-
+        reset_log();
 
         $(document).on("click", ".cell", function(){
             oncellclick(this);
@@ -67,6 +78,7 @@ $(document).ready(
             success: function(msg){
                 $('#div_info').html(msg.msg);
                 board.game_id = msg.game_id;
+                reset_log();
                 get_games_list();
                 save_board();
             }
@@ -87,6 +99,7 @@ $(document).ready(
                 $('#div_info').html(msg.msg+' '+game_id);
                 board.game_id = game_id;
                 board.player_color = 'black';
+                reset_log();
                 get_my_games();
                 save_board();
             }
@@ -108,6 +121,7 @@ $(document).ready(
                 $('#div_info').html(msg.msg+' '+game_id);
                 board.game_id = game_id;
                 board.player_color = msg.color;
+                reset_log();
                 load_board();
             }
         });
@@ -256,11 +270,83 @@ $(document).ready(
 
     function oncellclick(div){
 
-        //console.log('chess onclick '+board.last_cell.fig);
-        board.cell_click(div.id);
+        var move_result = board.cell_click(div.id);
+        if (move_result && move_result !== 'cancel') {
+            append_move_log(move_result);
+        }
         $("#board").html(board.gethtml());
 
     }
+
+    function get_cell_name(cell){
+        if (!cell) {
+            return '';
+        }
+        return String.fromCharCode(65 + Number(cell.col)) + (8 - Number(cell.row));
+    }
+
+    function get_piece_name(fig){
+        if (!fig || !(fig.piece || fig.tip)) {
+            return 'Фигура';
+        }
+        return figure_names[fig.piece || fig.tip] || 'Фигура';
+    }
+
+    function append_move_log(move){
+        var text = format_move_log(move);
+        if (!text) {
+            return;
+        }
+
+        move_log.push(text);
+        render_move_log();
+    }
+
+    function format_move_log(move){
+        if (!move || !move.piece) {
+            return '';
+        }
+
+        var prefix = move.color === 'white' ? 'Белые' : 'Чёрные';
+        var piece = get_piece_name(move);
+        var from = get_cell_name({ row: move.from[0], col: move.from[1] });
+        var to = get_cell_name({ row: move.to[0], col: move.to[1] });
+
+        if (move.type === 'attack') {
+            var target = move.target_color === 'white' ? 'белую ' : 'чёрную ';
+            target += (figure_names[move.target] || 'фигуру');
+            return prefix + ': ' + piece + ' ' + from + ' атакует ' + target + ' на ' + to;
+        }
+
+        return prefix + ': ' + piece + ' ' + from + ' → ' + to;
+    }
+
+    function reset_log(){
+        move_log = [];
+        render_move_log();
+    }
+
+    function render_move_log(){
+        var $log = $('#game_log');
+
+        if (!$log.length) {
+            return;
+        }
+
+        if (move_log.length === 0) {
+            $log.html('<div class="game-log-empty">Ходы ещё не сделаны</div>');
+            return;
+        }
+
+        var html = '';
+        for (var i = 0; i < move_log.length; i++) {
+            html += '<div class="game-log-entry">' + (i + 1) + '. ' + move_log[i] + '</div>';
+        }
+
+        $log.html(html);
+        $log.scrollTop($log[0].scrollHeight);
+    }
+
     function start_check_timer(){
         stop_check_timer();
         check_timer = setInterval(check_board, 3000);
