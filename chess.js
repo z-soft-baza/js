@@ -14,57 +14,6 @@ function play_sound(sound) {
     });
 }
 
-
-function cell_to_notation(cell_id) {
-    var col = parseInt(cell_id[1], 10);
-    var row = parseInt(cell_id[0], 10);
-    var file = 'abcdefgh'[col];
-    var rank = 8 - row;
-    return file + rank;
-}
-
-function append_game_log(action) {
-    if (!action) {
-        return;
-    }
-
-    var piece_name = {
-        p: 'Пешка',
-        l: 'Ладья',
-        k: 'Конь',
-        s: 'Слон',
-        f: 'Ферзь',
-        kr: 'Король'
-    };
-
-    var from = cell_to_notation(action.from);
-    var to = cell_to_notation(action.to);
-    var piece = piece_name[action.piece] || action.piece;
-    var text = '';
-
-    if (action.type === 'move') {
-        text = piece + ': ход ' + from + ' → ' + to;
-    }
-
-    if (action.type === 'attack_hit') {
-        text = piece + ': атака ' + from + ' → ' + to + ' (враг выжил, HP: ' + action.target_hp + ')';
-    }
-
-    if (action.type === 'attack_kill_move') {
-        text = piece + ': добивание ' + from + ' → ' + to + ' (клетка занята атакующей фигурой)';
-    }
-
-    if (!text) {
-        return;
-    }
-
-    if ($('#game_log .game-log-empty').length) {
-        $('#game_log').html('');
-    }
-
-    $('#game_log').prepend('<div class="game-log-item">' + text + '</div>');
-}
-
 $(document).ready(
 
 	function(){
