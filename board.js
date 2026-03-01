@@ -105,6 +105,8 @@ var board = {};
             cell.fig = this.selected_cell.fig;
             this.selected_cell.fig = f;
 
+            play_sound(move_sound);
+
 
             this.clear_selected();
             this.clear_avaible();
@@ -119,7 +121,7 @@ var board = {};
 
         if (cell.enemy) {
 
-            //enemy_mp3.play();
+            play_sound(attack_sound);
 
             cell.fig.hp -= this.selected_cell.fig.atack;
             if (cell.fig.hp<=0) {
@@ -129,7 +131,7 @@ var board = {};
                 cell.fig = this.selected_cell.fig;
                 this.selected_cell.fig = f;
 
-                //death_mp3.play();
+                play_sound(move_sound);
                 this.clear_selected();
                 this.clear_avaible();
                 this.clear_moved();
